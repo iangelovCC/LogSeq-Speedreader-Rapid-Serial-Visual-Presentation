@@ -1,0 +1,27 @@
+{
+  "name": "logseq-rsvp-speedreader",
+  "version": "0.1.0",
+  "description": "RSVP Speed Reading plugin for Logseq (GPL-2.0-only)",
+  "main": "dist/index.js",
+  "logseq": {
+    "id": "logseq-rsvp-speedreader",
+    "title": "RSVP Speed Reader",
+    "icon": "icon.svg"
+  },
+  "scripts": {
+    "build": "node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@logseq/libs": "^0.0.17"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "esbuild": "^0.20.2",
+    "typescript": "^5.4.5",
+    "vitest": "^1.5.0"
+  },
+  "license": "GPL-2.0-only"
+}
