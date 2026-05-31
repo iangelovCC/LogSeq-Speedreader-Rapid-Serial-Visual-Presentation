@@ -1,4 +1,5 @@
 import "@logseq/libs";
+import type { SettingSchemaDesc } from "@logseq/libs/dist/LSPlugin";
 
 type ThemeMode = "auto" | "light" | "dark";
 type PunctuationMode = "none" | "light" | "strong";
@@ -436,7 +437,7 @@ function normalizeText(input: string) {
     .replace(/```[\s\S]*?```/g, " ")
     .replace(/`[^`]*`/g, " ")
     .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
-    .replace(/\[[^\]]*\]\([^)]*\)/g, "$1")
+    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
     .replace(/\[\[([^\]]+)\]\]/g, "$1")
     .replace(/\(\(([^)]+)\)\)/g, "$1")
     .replace(/(^|\s)#([\w/-]+)/g, " $2")
@@ -507,12 +508,13 @@ function settingsSnapshot(): PluginSettings {
 
 async function readCurrentPage() {
   const page = await logseq.Editor.getCurrentPage();
-  if (!page?.name) {
+  const pageName = typeof page?.name === "string" ? page.name : "";
+  if (!pageName) {
     logseq.UI.showMsg("No active page found.", "warning");
     return;
   }
 
-  const blocks = await logseq.Editor.getPageBlocksTree(page.name);
+  const blocks = await logseq.Editor.getPageBlocksTree(pageName);
   const text = flattenBlocks(Array.isArray(blocks) ? blocks : []);
   player.startText(text);
 }
@@ -573,16 +575,16 @@ async function main() {
     },
   );
 
-  logseq.Editor.registerSlashCommand("RSVP: Read selected block(s)", () => {
-    void readSelectedBlocks();
+  logseq.Editor.registerSlashCommand("RSVP: Read selected block(s)", async () => {
+    await readSelectedBlocks();
   });
 
-  logseq.Editor.registerSlashCommand("RSVP: Read current page", () => {
-    void readCurrentPage();
+  logseq.Editor.registerSlashCommand("RSVP: Read current page", async () => {
+    await readCurrentPage();
   });
 
-  logseq.Editor.registerBlockContextMenuItem("RSVP: Speed-read this block", ({ uuid }) => {
-    void readSingleBlock(uuid);
+  logseq.Editor.registerBlockContextMenuItem("RSVP: Speed-read this block", async ({ uuid }) => {
+    await readSingleBlock(uuid);
   });
 
   logseq.provideModel({
