@@ -1,0 +1,28 @@
+{
+  "name": "logseq-rsvp-speedreader",
+  "version": "0.1.0",
+  "description": "Lightweight LogSeq RSVP speed-reading plugin",
+  "main": "dist/index.html",
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "npm run clean && esbuild src/index.ts --bundle --format=iife --target=es2020 --outfile=dist/index.js && cp index.html dist/index.html",
+    "lint": "tsc --noEmit",
+    "test": "npm run lint && npm run build"
+  },
+  "keywords": [
+    "logseq",
+    "plugin",
+    "rsvp",
+    "speed-reading"
+  ],
+  "author": "",
+  "license": "GPL-2.0-only",
+  "dependencies": {
+    "@logseq/libs": "^0.0.17"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "esbuild": "^0.27.0",
+    "typescript": "^5.9.3"
+  }
+}
